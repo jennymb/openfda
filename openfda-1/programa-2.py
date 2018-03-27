@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import http.client
 import json
 
@@ -16,6 +15,3 @@ reponse = json.loads(repos_raw)
 
 for i in range (len (repos['results'])):
     print ('El identificador del medicamento',i+1,'es'+repos['results'][i]['id'])
-=======
-
->>>>>>> origin/master
