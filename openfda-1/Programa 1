@@ -1,4 +1,4 @@
-#basandonos en el ejemplo del ejercici 10 de L7, 
+#basandonos en el ejemplo del ejercici 10 de L7,
 import http.client
 import json
 
@@ -15,4 +15,4 @@ repos = json.loads(repos_raw)
 
 info_medicamento=repos['results'][0]
 
-print(info_medicamento)
+print('El identificador del medicamento es'+info_medicamento['id']+', su propósito es'+info_medicamento['purpose'][0]+', y el nombre del fabricante es' + info_medicamento['openfda']['manufacturer_name'][0])
