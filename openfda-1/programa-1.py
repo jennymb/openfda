@@ -12,8 +12,8 @@ print(r1.status, r1.reason)
 repos_raw = r1.read().decode("utf-8")
 conn.close()
 
-reponse = json.loads(repos_raw)
+response = json.loads(repos_raw)
 
-info=reponse['results'][0]
+info=response['results'][0]
 
 print('El identificador del medicamento es'+info['id']+', su propósito es'+info['purpose'][0]+', y el nombre del fabricante es' + info['openfda']['manufacturer_name'][0])
