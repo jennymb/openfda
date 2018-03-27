@@ -10,7 +10,7 @@ print(r1.status, r1.reason)
 repos_raw = r1.read().decode("utf-8")
 conn.close()
 
-repos = json.loads(repos_raw)
+reponse = json.loads(repos_raw)
 
 for i in range (len (repos['results'])):
     print ('El identificador del medicamento',i+1,'es'+repos['results'][i]['id'])
