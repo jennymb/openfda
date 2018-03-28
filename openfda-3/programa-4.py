@@ -102,4 +102,4 @@ print("")
 print("Servidor parado")
 httpd.close()
 
-
+# https://github.com/joshmaker/simple-python-webserver/blob/master/server.py
