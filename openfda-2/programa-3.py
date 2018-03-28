@@ -31,9 +31,11 @@ while True:
         break
     else:
         print('Obteniendo datos...')
+
     n=n+1
 
 fabricantes2=set(fabricantes1)
+
 print('Los fabricantes que utilizan la aspirina en sus medicamentos son los siguientes:',fabricantes2)
 
 
