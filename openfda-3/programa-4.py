@@ -2,18 +2,18 @@
 import http.server
 import socketserver
 
-# -- Puerto donde lanzar el servidor
+#Puerto donde lanzar el servidor
 PORT = 8005
 
 def lista_medicamentos():
     #necesitamos un cliente que acceda a la página web para bajar los medicamentos. Con ello,
     #crearemos un fichero html que se lo pasaremos a nuestro servidor web, que lo mandará en respuesta a cualquier
-    #petición de un cliente
+    #petición de un cliente.
 
     import http.client
     import json
 
-    medicamentos=[]
+    medicamentos=[] # Creamos una lista donde iremos añadiendo el nombre del medicamento, que es lo que nos interesa.
 
     headers = {'User-Agent': 'http-client'}
 
@@ -28,41 +28,41 @@ def lista_medicamentos():
 
     for i in range (len(r2['results'])):
 
-        if r2['results'][i]['openfda']:
+        if r2['results'][i]['openfda']: # Nos aseguramos de que exista el campo openfda para el medicamento
+                                        # que vamos a añadir a la lista de medicamentos, ya que si no, nos daría KeyError
+
             medicamentos.append(r2['results'][i]['openfda']['generic_name'][0])
-            if len(medicamentos)==10:
+
+            if len(medicamentos)==10: # Una vez que la lista que hemos creado tenga 10 medicamentos, salimos del bucle for
+                                      # con un break. Este paso se realiza por el anterior if, ya que no tenemos asegurado
+                                      # que según vayamos iterando, los 10 primeros vayan a tener el campo requerido para
+                                      # poder añadirlos a la lista. (Es más, comprobándolo, solo obtenemos 9 medicamentos,
+                                      # por eso es necesario poner como límite 100 (un número cualquiera pero mayor a 10)
+                                      # para poder seguir iterando y especificar que el programa sólo debe parar
+                                      # una vez que la lista 'medicamentos' tenga 10 elementos).
                 break
 
-    return(medicamentos)
+    return(medicamentos) # Por último, la función nos devuelve la lista medicamentos.
 
-# Clase con nuestro manejador. Es una clase derivada de BaseHTTPRequestHandler
-# Esto significa que "hereda" todos los metodos de esta clase. Y los que
-# nosotros consideremos los podemos reemplazar por los nuestros
+
+# La clase testHTTPRequestHandler hereda todos los métodos de la clase http.server.BaseHTTPRequestHandler.
 class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
 
-    # GET. Este metodo se invoca automaticamente cada vez que hay una
-    # peticion GET por HTTP. El recurso que nos solicitan se encuentra
-    # en self.path
     def do_GET(self):
 
-        # La primera linea del mensaje de respuesta es el
-        # status. Indicamos que OK
-        self.send_response(200)
 
-        # En las siguientes lineas de la respuesta colocamos las
-        # cabeceras necesarias para que el cliente entienda el
-        # contenido que le enviamos (que sera HTML)
-        self.send_header('Content-type', 'text/html')
-        self.end_headers()
+        self.send_response(200) #Primero enviamos el estado de la respuesta, que será OK.
 
-        # Este es el mensaje que enviamos al cliente: un texto y
-        # el recurso solicitado
+        self.send_header('Content-type', 'text/html') # Después enviamos las cabecerasnecesarias para que el cliente entienda el
+                                                      # contenido que le enviamos (que sera HTML)
+        self.end_headers() # Indicamos que las cabeceras ya han terminamos.
+
+        # Procedemos al contenido html.
 
         contenido="""
         <!doctype html>
         <html>
-             <h1>Hola!</h2>
-             <p>Listado de medicamentos:</p>
+             <h1>El listado de medicamentos obtenido es el siguiente:</h2>
              <p>"""
         for i in lista_medicamentos():
             contenido=contenido+"<p>"+i+"</p>"
@@ -70,36 +70,31 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
         </html>
         """
 
+        #con un bucle for, vamos iterando por cada elemento de la lista, colocando cada medicamento en un párrafo consecutivamente.
 
 
-        # Enviar el mensaje completo
+        # Enviamos el contenido html.
         self.wfile.write(bytes(contenido, "utf8"))
         print("File served!")
         return
 
+# El servidor comienza a aquí
 
-# ----------------------------------
-# El servidor comienza a aqui
-# ----------------------------------
 # Establecemos como manejador nuestra propia clase
 Handler = testHTTPRequestHandler
 
-# -- Configurar el socket del servidor, para esperar conexiones de clientes
+# Creamos el socket que esperará las peticiones de los clientes.
 httpd = socketserver.TCPServer(("", PORT), Handler)
 print("serving at port", PORT)
 
-# Entrar en el bucle principal
-# Las peticiones se atienden desde nuestro manejador
-# Cada vez que se ocurra un "GET" se invoca al metodo do_GET de
-# nuestro manejador
+
 try:
-    httpd.serve_forever()
+    httpd.serve_forever() # el servidor recibirá y establecerá conexión con todos los clientes
 except KeyboardInterrupt:
     print("")
-    print("Interrumpido por el usuario")
+    print("Interrumpido por el usuario") # Solo parará en caso de que el usuario lo decida.
 
 print("")
 print("Servidor parado")
 httpd.close()
 
-# https://github.com/joshmaker/simple-python-webserver/blob/master/server.py
