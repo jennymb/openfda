@@ -33,14 +33,16 @@ while True:
 
     for i in range (len(r2['results'])): # Realizamos un bucle for para ir iterando por la información de cada medicamento.
 
-        if r2['results'][i]['openfda']: # No todos ellos van a tener definido el campo openfda. Por ello, debemos asegurarnos
-                                        # de que lo tiene para poder añadir el nombre del fabricante a la lista. Sin este paso
-                                        # de aseguración, nos saldría un KeyError para aquellos en los que no exista openfda
-                                        # o no tenga ninguún valor.
+        info=r2['results'][i]
 
-            fabricantes1.append(r2['results'][i]['openfda']['manufacturer_name'][0]) # para los que sí tienen el campo requerido,
-                                                                                     # añadimos el fabricante del medicamento a la
-                                                                                     # lista fabricantes1.
+        if info['openfda']: # No todos ellos van a tener definido el campo openfda. Por ello, debemos asegurarnos
+                            # de que lo tiene para poder añadir el nombre del fabricante a la lista. Sin este paso
+                            # de aseguración, nos saldría un KeyError para aquellos en los que no exista openfda
+                            # o no tenga ninguún valor.
+
+            fabricantes1.append(info['openfda']['manufacturer_name'][0]) # para los que sí tienen el campo requerido,
+                                                                         # añadimos el fabricante del medicamento a la
+                                                                         # lista fabricantes1.
 
     if (len(r2['results'])<100): # Si el número de valores que da results es menor que 100, significa que el documento se ha acabado, ya que va de
                                  # 100 en 100 y no puede sacar otros 100 medicamentos. Por tanto, ya hemos recorrido el dococumento entero y
@@ -50,7 +52,7 @@ while True:
         print('Obteniendo datos...')
 
     n=n+1 # Para ello, aumentamos en una unidad el parámetro n, que hará que se pasen n*100 medicamentos (ya anteriormente leídos). Este paso
-          # podría identarse dentro del else, ya que si se cumple el if, al hacer un break, no llegaría a realizarse este paso
+          # podría identarse dentro del else, ya que si se cumple el if, al hacer un break, no llegaría a realizarse este paso.
 
 fabricantes2=set(fabricantes1) # Una vez que salimos del bucle while y obtengamos toda la información, obtendremos fabricantes repetidos
                                # ya que es posible que un mismo fabricante sea el autor de distintos medicamentos.
