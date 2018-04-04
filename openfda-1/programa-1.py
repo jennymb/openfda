@@ -1,9 +1,9 @@
-#basandonos en el ejemplo del ejercici 10 de L7,
+# basándonos en el ejemplo del ejercici 10 de L7,
 import http.client
 import json
 
 # los módulos que vamos a utilizar para establecer la conexión y acceder a la información (http.client)
-# y para
+# y para decodificar la información y obtenerla finalmente en un formato python, el módulo json.
 
 headers = {'User-Agent': 'http-client'} # Indicamos qué navegador somos, no es un paso necesario para el funcionamiento
                                         # del programa.
