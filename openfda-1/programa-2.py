@@ -16,9 +16,9 @@ r2 = json.loads(repos_raw)
 
 for i in range (len (r2['results'])):
 
-    info=r2['results']
+    info=r2['results'][i]
 
-    print ('El identificador del medicamento',i+1,'es'+info[i]['id'])
+    print ('El identificador del medicamento',i+1,'es'+info['id'])
 
 # el único cambio frente al programa 1, es que realizamos un bucle for iterando por cada posición de los elementos
 # (en este caso iterando sobre la información de cada medicamento) y obteniendo e imprimiendo por pantalla

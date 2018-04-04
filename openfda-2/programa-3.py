@@ -21,7 +21,7 @@ while True:
 
 # Necesitamos convertir el número skip en un string ya que la URL lo es, y para convertir skip de tipo int a string, utilizamos str. De esta forma
 # lo puede leer.
-#Buscamos en el nombre de la sustancia y en el complejo activo.
+# Buscamos en el nombre de la sustancia y en el complejo activo.
 
     r1 = conn.getresponse()
 
