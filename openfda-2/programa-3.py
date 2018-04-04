@@ -1,3 +1,4 @@
+
 import http.client
 import json
 
@@ -8,7 +9,6 @@ headers = {'User-Agent': 'http-client'}
 # es capaz de devolvernos 100 medicamentos, pues si el límite sobrepasara de 100, la página web
 # tardaría mucho en responder, incluso podría bloquearse el navegador.
 
-fabricantes1=[] # creamos una lista donde vamos a ir añadiendo todos los fabricantes.
 n=0 # inicializamos un parámetro n, el cual irá aumentando en el número de vueltas,
     # que nos será necesario para ir cambiando el número del skip, y poder ir avanzando por toda la información total.
 
@@ -17,7 +17,11 @@ while True:
     skip=n*100 # definimos el número skip que le pasaremos a la URL.
 
     conn = http.client.HTTPSConnection("api.fda.gov")
-    conn.request("GET", '/drug/label.json?search=active_ingredient:"acetylsalicylic"+substance_name:"ASPIRIN"&limit=100&skip='+str(skip), None, headers)
+
+    try:
+        conn.request("GET", '/drug/label.json?search=active_ingredient:"acetylsalicylic"&limit=100&skip='+str(skip), None, headers)
+    except:
+        print('Ha ocurrido un error. No se a podido solicitar el recurso.')
 
 # Necesitamos convertir el número skip en un string ya que la URL lo es, y para convertir skip de tipo int a string, utilizamos str. De esta forma
 # lo puede leer.
@@ -26,10 +30,16 @@ while True:
     r1 = conn.getresponse()
 
     print(r1.status, r1.reason)
+
+    if r1.status == 404:
+        print('Ha ocurrido un error. Recurso no encontrado')
+
     repos_raw = r1.read().decode("utf-8")
     conn.close()
 
     r2 = json.loads(repos_raw)
+
+    print('Los fabricantes que utilizan aspirinas son los siguientes:')
 
     for i in range (len(r2['results'])): # Realizamos un bucle for para ir iterando por la información de cada medicamento.
 
@@ -40,24 +50,21 @@ while True:
                             # de aseguración, nos saldría un KeyError para aquellos en los que no exista openfda
                             # o no tenga ninguún valor.
 
-            fabricantes1.append(info['openfda']['manufacturer_name'][0]) # para los que sí tienen el campo requerido,
-                                                                         # añadimos el fabricante del medicamento a la
-                                                                         # lista fabricantes1.
+            print(info['openfda']['manufacturer_name'][0])
 
-    if (len(r2['results'])<100): # Si el número de valores que da results es menor que 100, significa que el documento se ha acabado, ya que va de
-                                 # 100 en 100 y no puede sacar otros 100 medicamentos. Por tanto, ya hemos recorrido el dococumento entero y
+    if (len(r2['results'])<100): # Si el número de valores que da results es menor que 100, significa ya ha llegado a la parte final del documento
+                                 # con los parámetros exigidos, ya que va de 100 en 100 y no puede sacar otros 100 medicamentos.
+                                 # Por tanto, ya hemos recorrido el dococumento entero y
                                  # realizamos un break para salir del bucle while.
         break
-    else:                        # En caso de que sí consigamos 100 medicamentos, seguimos dando una vuelta más al documento,
-        print('Obteniendo datos...')
 
-    n=n+1 # Para ello, aumentamos en una unidad el parámetro n, que hará que se pasen n*100 medicamentos (ya anteriormente leídos). Este paso
+    n=n+1 # Para ir aumentando el skip, aumentamos en una unidad el parámetro n, que hará que se pasen n*100 medicamentos (ya anteriormente leídos). Este paso
           # podría identarse dentro del else, ya que si se cumple el if, al hacer un break, no llegaría a realizarse este paso.
 
-fabricantes2=set(fabricantes1) # Una vez que salimos del bucle while y obtengamos toda la información, obtendremos fabricantes repetidos
-                               # ya que es posible que un mismo fabricante sea el autor de distintos medicamentos.
-                               # Para asegurarnos de no repetir ninguno, utilizamos set() con lo que nos quedará un conjunto
-                               # de elementos únicos y no repetidos.
 
-print('Los fabricantes que utilizan la aspirina en sus medicamentos son los siguientes:',fabricantes2)
+# OBSERVACIÓN: Anteriormnete, tenía este ejercicio buscando también ASPIRIN en substance_name. Si lo pongo como parámetro
+# a buscar, me salen muchos más fabricantes que utilizan la aspirina, aunque no esté figurado como complejo activo del medicamento.
+# la estructura de este programa es eficaz si se utiliza el parámetro substance_name. Utilizando solo el parámetro
+# active ingredient, solo refiere 2 medicamentos en el documenton total, por tanto no es necesario utilizar el skip
+# ni ir aumentando el número del skip.
 
