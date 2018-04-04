@@ -9,13 +9,16 @@ conn.request("GET", "/drug/label.json?limit=10", None, headers) #en este caso,co
 r1 = conn.getresponse()
 
 print(r1.status, r1.reason)
-r2 = r1.read().decode("utf-8")
+repos_raw = r1.read().decode("utf-8")
 conn.close()
 
-response = json.loads(r2)
+r2 = json.loads(repos_raw)
 
-for i in range (len (response['results'])):
-    print ('El identificador del medicamento',i+1,'es'+response['results'][i]['id'])
+for i in range (len (r2['results'])):
+
+    info=r2['results']
+
+    print ('El identificador del medicamento',i+1,'es'+info[i]['id'])
 
 # el único cambio frente al programa 1, es que realizamos un bucle for iterando por cada posición de los elementos
 # (en este caso iterando sobre la información de cada medicamento) y obteniendo e imprimiendo por pantalla
