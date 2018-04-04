@@ -28,10 +28,12 @@ def lista_medicamentos():
 
     for i in range (len(r2['results'])):
 
-        if r2['results'][i]['openfda']: # Nos aseguramos de que exista el campo openfda para el medicamento
-                                        # que vamos a añadir a la lista de medicamentos, ya que si no, nos daría KeyError
+        info=r2['results'][i]
 
-            medicamentos.append(r2['results'][i]['openfda']['generic_name'][0])
+        if info['openfda']: # Nos aseguramos de que exista el campo openfda para el medicamento
+                            # que vamos a añadir a la lista de medicamentos, ya que si no, nos daría KeyError
+
+            medicamentos.append(info['openfda']['generic_name'][0])
 
             if len(medicamentos)==10: # Una vez que la lista que hemos creado tenga 10 medicamentos, salimos del bucle for
                                       # con un break. Este paso se realiza por el anterior if, ya que no tenemos asegurado
@@ -40,6 +42,10 @@ def lista_medicamentos():
                                       # por eso es necesario poner como límite 100 (un número cualquiera pero mayor a 10)
                                       # para poder seguir iterando y especificar que el programa sólo debe parar
                                       # una vez que la lista 'medicamentos' tenga 10 elementos).
+                                      # Este 'if' podría ponerse al mismo nivel que el otro if, pero como sólo aumentamos la
+                                      # lista cuando se añaden medicamentos, me parece mejor comprobar la longitud de la lista sólo
+                                      # si esta aumenta. Pero funcionalmente, no es necesario que este if esté identado dentro del otro.
+
                 break
 
     return(medicamentos) # Por último, la función nos devuelve la lista medicamentos.
@@ -69,9 +75,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
         """</p>
         </html>
         """
-
         #con un bucle for, vamos iterando por cada elemento de la lista, colocando cada medicamento en un párrafo consecutivamente.
-
 
         # Enviamos el contenido html.
         self.wfile.write(bytes(contenido, "utf8"))
@@ -92,9 +96,8 @@ try:
     httpd.serve_forever() # el servidor recibirá y establecerá conexión con todos los clientes
 except KeyboardInterrupt:
     print("")
-    print("Interrumpido por el usuario") # Solo parará en caso de que el usuario lo decida.
+    print("Interrumpido por el usuario.") # Solo parará en caso de que el usuario lo decida.
 
-print("")
 print("Servidor parado")
 httpd.close()
 
