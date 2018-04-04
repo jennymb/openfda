@@ -25,7 +25,7 @@ while True:
 
 # Necesitamos convertir el número skip en un string ya que la URL lo es, y para convertir skip de tipo int a string, utilizamos str. De esta forma
 # lo puede leer.
-# Buscamos en el nombre de la sustancia y en el complejo activo.
+# Buscamos en el complejo activo.
 
     r1 = conn.getresponse()
 
@@ -52,8 +52,8 @@ while True:
 
             print(info['openfda']['manufacturer_name'][0])
 
-    if (len(r2['results'])<100): # Si el número de valores que da results es menor que 100, significa ya ha llegado a la parte final del documento
-                                 # con los parámetros exigidos, ya que va de 100 en 100 y no puede sacar otros 100 medicamentos.
+    if (len(r2['results'])<100): # Si el número de valores que da results es menor que 100, significa ya ha llegado a la parte final del documento,
+                                 # ya que estamos imponiendo como límite 100.
                                  # Por tanto, ya hemos recorrido el dococumento entero y
                                  # realizamos un break para salir del bucle while.
         break
