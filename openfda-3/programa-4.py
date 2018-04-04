@@ -18,9 +18,17 @@ def lista_medicamentos():
     headers = {'User-Agent': 'http-client'}
 
     conn = http.client.HTTPSConnection("api.fda.gov")
-    conn.request("GET", "/drug/label.json?limit=100", None, headers)
+    try:
+        conn.request("GET", "/drug/label.json?limit=100", None, headers)
+    except:
+        print('Ha ocurrido un error. No se a podido solicitar el recurso.')
+
     r1 = conn.getresponse()
     print(r1.status, r1.reason)
+
+    if r1.status == 404:
+        print('Ha ocurrido un error. Recurso no encontrado')
+        
     repos_raw = r1.read().decode("utf-8")
     conn.close()
 
