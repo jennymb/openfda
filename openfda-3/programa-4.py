@@ -77,10 +77,10 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
         <!doctype html>
         <html>
              <h1>El listado de medicamentos obtenido es el siguiente:</h2>
-             <p>"""
+             <ol>"""
         for i in lista_medicamentos():
             contenido=contenido+"<li>"+i+"</li>"
-        """</p>
+        """</ol>
         </html>
         """
         #con un bucle for, vamos iterando por cada elemento de la lista, colocando cada medicamento en un párrafo consecutivamente.
