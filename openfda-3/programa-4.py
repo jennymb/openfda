@@ -79,7 +79,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
              <h1>El listado de medicamentos obtenido es el siguiente:</h2>
              <p>"""
         for i in lista_medicamentos():
-            contenido=contenido+"<p>"+i+"</p>"
+            contenido=contenido+"<li>"+i+"</li>"
         """</p>
         </html>
         """
