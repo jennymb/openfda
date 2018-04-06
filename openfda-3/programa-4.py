@@ -3,7 +3,7 @@ import http.server
 import socketserver
 
 #Puerto donde lanzar el servidor
-PORT = 8005
+PORT = 8006
 
 def lista_medicamentos():
     #necesitamos un cliente que acceda a la página web para bajar los medicamentos. Con ello,
