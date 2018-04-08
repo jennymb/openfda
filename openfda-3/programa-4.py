@@ -29,7 +29,7 @@ def lista_medicamentos():
     if r1.status == 404:
         print('Ha ocurrido un error. Recurso no encontrado')
         exit(1)
-        
+
     repos_raw = r1.read().decode("utf-8")
     conn.close()
 

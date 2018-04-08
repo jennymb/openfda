@@ -24,6 +24,7 @@ print(r1.status, r1.reason) # Imprimimos por pantalla el estado y la razón, que
                             # bien la conexión.
 if r1.status==404:
     print('Ha ocurrido un error. Recurso no encontrado')
+    exit(1) # si el recurso no es encontrado, el programa avisa al usuario y cierra el programa.
 
 repos_raw = r1.read().decode("utf-8") # decodificamos la respuesta con utf-8 (Formato de Transformación Unicode)
 conn.close()
