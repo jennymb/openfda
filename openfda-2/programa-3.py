@@ -33,6 +33,7 @@ while True:
 
     if r1.status == 404:
         print('Ha ocurrido un error. Recurso no encontrado')
+        exit(1)
 
     repos_raw = r1.read().decode("utf-8")
     conn.close()
@@ -51,6 +52,7 @@ while True:
                             # o no tenga ninguún valor.
 
             print('El medicamento con id', info['id'], 'fue fabricado por', info['openfda']['manufacturer_name'][0])
+
         else:
             print('El medicamento con id',info['id'], ', no tiene especificado el fabricante.' )
 
@@ -66,7 +68,7 @@ while True:
 
 # OBSERVACIÓN: Anteriormnete, tenía este ejercicio buscando también ASPIRIN en substance_name. Si lo pongo como parámetro
 # a buscar, me salen muchos más fabricantes que utilizan la aspirina, aunque no esté figurado como complejo activo del medicamento.
-# la estructura de este programa es eficaz si se utiliza el parámetro substance_name. Utilizando solo el parámetro
-# active ingredient, solo refiere 2 medicamentos en el documenton total, por tanto no es necesario utilizar el skip
+# La estructura de este programa es eficaz si se utiliza el parámetro substance_name. Utilizando solo el parámetro
+# active ingredient, solo refieren 2 medicamentos en el documenton total, por tanto no es necesario utilizar el skip
 # ni ir aumentando el número del skip.
 
