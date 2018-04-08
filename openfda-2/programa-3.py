@@ -50,7 +50,9 @@ while True:
                             # de aseguración, nos saldría un KeyError para aquellos en los que no exista openfda
                             # o no tenga ninguún valor.
 
-            print(info['openfda']['manufacturer_name'][0])
+            print('El medicamento con id', info['id'], 'fue fabricado por', info['openfda']['manufacturer_name'][0])
+        else:
+            print('El medicamento con id',info['id'], ', no tiene especificado el fabricante.' )
 
     if (len(r2['results'])<100): # Si el número de valores que da results es menor que 100, significa ya ha llegado a la parte final del documento,
                                  # ya que estamos imponiendo como límite 100.

@@ -3,7 +3,7 @@ import http.server
 import socketserver
 
 #Puerto donde lanzar el servidor
-PORT = 8005
+PORT = 8006
 
 def lista_medicamentos():
     #necesitamos un cliente que acceda a la página web para bajar los medicamentos. Con ello,
@@ -78,10 +78,10 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
         <!doctype html>
         <html>
              <h1>El listado de medicamentos obtenido es el siguiente:</h2>
-             <p>"""
+             <ol>"""
         for i in lista_medicamentos():
-            contenido=contenido+"<p>"+i+"</p>"
-        """</p>
+            contenido=contenido+"<li>"+i+"</li>"
+        """</ol>
         </html>
         """
         #con un bucle for, vamos iterando por cada elemento de la lista, colocando cada medicamento en un párrafo consecutivamente.
