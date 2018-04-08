@@ -28,6 +28,7 @@ def lista_medicamentos():
 
     if r1.status == 404:
         print('Ha ocurrido un error. Recurso no encontrado')
+        exit(1)
         
     repos_raw = r1.read().decode("utf-8")
     conn.close()
@@ -109,3 +110,5 @@ except KeyboardInterrupt:
 print("Servidor parado")
 httpd.close()
 
+#OBSERVACIÓN: Si ponemos limit 10, nunca podríamos obtener una lista con el nombre de 10 medicamentos, ya que el
+# programa coge los 10 primeros medicamentos y el medicamento número 2 no tiene información sobre su nombre.
