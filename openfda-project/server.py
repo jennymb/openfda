@@ -288,7 +288,6 @@ class testHTTPRequestHandler(
 
         # self. send_error envía una respuesta de error al cliente, donde el número (404,401...) especifica el código de error http.
 
-
 # servidor:
 
 PORT = 8000
@@ -303,7 +302,6 @@ try:
 except KeyboardInterrupt:
     print("Interrumpido por el usuario.")  # Solo parará en caso de que el usuario lo decida.
 
-print("Servidor parado")
 httpd.close()
 
 # bibliografia
