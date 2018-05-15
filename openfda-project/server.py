@@ -19,8 +19,7 @@ class OpenFDAClient():
                      headers)  # la petición es de tipo GET, es decir, queremos obtener una información
         r1 = conn.getresponse()  # guardamos la respuesta obtenida por la función conn.get.response() en la variable r1.
         print(r1.status, r1.reason)
-        repos_raw = r1.read().decode(
-            "utf-8")  # decodificamos la respuesta con utf-8 (Formato de Transformación Unicode)
+        repos_raw = r1.read().decode("utf-8")  # decodificamos la respuesta con utf-8 (Formato de Transformación Unicode)
         conn.close()
         drogas = json.loads(repos_raw)  # convierte el objeto json a un formato python (diccionarios, listas...)
 
@@ -199,8 +198,7 @@ class OpenFDAHTML():
     #  y <li> para colocar cada elemento en un punto.
 
 
-class testHTTPRequestHandler(
-    http.server.BaseHTTPRequestHandler):  # La clase testHTTPRequestHandler hereda todos los métodos de la clase http.server.BaseHTTPRequestHandler.
+class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):  # La clase testHTTPRequestHandler hereda todos los métodos de la clase http.server.BaseHTTPRequestHandler.
 
     def do_GET(self):
 
