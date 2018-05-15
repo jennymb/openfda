@@ -1,8 +1,8 @@
-import http.server
-import json
-import http.client
-import socketserver
 
+import http.client
+import json
+import socketserver
+import http.server
 
 # Este programa está basado en las anteriores prácticas openfda.
 
