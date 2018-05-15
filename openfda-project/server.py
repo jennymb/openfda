@@ -14,12 +14,11 @@ class OpenFDAClient():
 
     def get_drugs(self, limit):
         headers = {'User-Agent': 'http-client'}
-        conn = http.client.HTTPSConnection("api.fda.gov")  # establecemos la conexión con el servidor
-        conn.request("GET", '/drug/label.json?limit=' + limit, None,
-                     headers)  # la petición es de tipo GET, es decir, queremos obtener una información
-        r1 = conn.getresponse()  # guardamos la respuesta obtenida por la función conn.get.response() en la variable r1.
+        conn = http.client.HTTPSConnection("api.fda.gov")                      # establecemos la conexión con el servidor
+        conn.request("GET", '/drug/label.json?limit=' + limit, None, headers)  # la petición es de tipo GET, es decir, queremos obtener una información
+        r1 = conn.getresponse()                                                # guardamos la respuesta obtenida por la función conn.get.response() en la variable r1.
         print(r1.status, r1.reason)
-        repos_raw = r1.read().decode("utf-8")  # decodificamos la respuesta con utf-8 (Formato de Transformación Unicode)
+        repos_raw = r1.read().decode("utf-8")                                  # decodificamos la respuesta con utf-8 (Formato de Transformación Unicode)
         conn.close()
         drogas = json.loads(repos_raw)  # convierte el objeto json a un formato python (diccionarios, listas...)
 
@@ -30,8 +29,7 @@ class OpenFDAClient():
     def get_active_ingredient(self, active_ingredient):
         headers = {'User-Agent': 'http-client'}
         conn = http.client.HTTPSConnection('api.fda.gov')
-        conn.request('GET', '/drug/label.json?search=active_ingredient:' + active_ingredient + '&limit=10', None,
-                     headers)
+        conn.request('GET', '/drug/label.json?&search=active_ingredient:' + active_ingredient + '&limit=10', None, headers)
         r1 = conn.getresponse()
         print(r1.status, r1.reason)
         repos_raw = r1.read().decode("utf-8")
@@ -43,7 +41,7 @@ class OpenFDAClient():
     def get_companies(self, company):
         headers = {'User-Agent': 'http-client'}
         conn = http.client.HTTPSConnection('api.fda.gov')
-        conn.request('GET', '/drug/label.json?search=manufacturer_name:' + company + '&limit=10', None, headers)
+        conn.request('GET', '/drug/label.json?&search=manufacturer_name:' + company + '&limit=10', None, headers)
         r1 = conn.getresponse()
         print(r1.status, r1.reason)
         repos_raw = r1.read().decode("utf-8")
@@ -61,13 +59,12 @@ class OpenFDAParser():
     def get_list_drugs(self, drogas):  # para obtener la lista de medicamentos
         list_drugs = []
 
-        for i in range(len(
-                drogas['results'])):  # realizamos un bucle que itere por todos los elementos del diccionario 'drogas'.
-            info = drogas['results'][i]
+        for i in range(len(drogas['results'])):  # realizamos un bucle que itere por todos los elementos del diccionario 'drogas'.
+            info = drogas['results'][i]   #info guarda la información de cada medicamento.
 
             if info['openfda']:  # Nos aseguramos de que exista el campo openfda para el medicamento
                 # que vamos a añadir a la lista de medicamentos, ya que si no, nos daría KeyError
-                nombre = info['openfda']['generic_name'][0]
+                nombre = info['openfda']['substance_name'][0]
             else:
                 id = info['id']
                 nombre = 'El medicamento con ID ' + id + ', no tiene nombre genérico.'
@@ -217,17 +214,14 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):  # La clase te
                 html = OpenFDAHTML.menu_page(self)  # en este caso simplemente creamos la página web inicial.
 
             elif "/listDrugs" in self.path:
-                limite = self.path.split("=")[1]  # especificamos qué es 'limit' en la ruta /listDrugs,
-                # que corresponde al parámetro limit que hay que pasarle a nuestra función cliente
-                # para que obtenga la información de la API OPENFDA.
-                pagina = OpenFDAClient.get_drugs(self,
-                                                 limite)  # obtenemos el diccionario del recurso solicitado y lo guaramos en la variable 'pagina'.
-                medicamentos = OpenFDAParser.get_list_drugs(self,
-                                                            pagina)  # obtenemos y guardamos la información que queremos sobre el diccionario que hemos obtenido previamente, y
-                # guardamos esta información en la variable medicamentos.
-                html = OpenFDAHTML.drug_page(self,
-                                             medicamentos)  # finalmente, creamos una estructura html para mostrar la información al cliente, pasándole la información
-                # de 'medicamentos', para que se implemente en nuestra página html.
+                limite = self.path.split("=")[1]                            # especificamos qué es 'limit' en la ruta /listDrugs,
+                                                                            # que corresponde al parámetro limit que hay que pasarle a nuestra función cliente
+                                                                            # para que obtenga la información de la API OPENFDA.
+                pagina = OpenFDAClient.get_drugs(self, limite)              # obtenemos el diccionario del recurso solicitado y lo guaramos en la variable 'pagina'.
+                medicamentos = OpenFDAParser.get_list_drugs(self, pagina)   # obtenemos y guardamos la información que queremos sobre el diccionario que hemos obtenido previamente, y
+                                                                            # guardamos esta información en la variable medicamentos.
+                html = OpenFDAHTML.drug_page(self, medicamentos)  # finalmente, creamos una estructura html para mostrar la información al cliente, pasándole la información
+                                                                  # de 'medicamentos', para que se implemente en nuestra página html.
 
             elif "/listCompanies" in self.path:
                 limite = self.path.split("=")[1]
@@ -243,6 +237,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):  # La clase te
 
             elif "/searchCompany" in self.path:
                 fabricante = self.path.split("?")[1].split("=")[1].split("&")[0]
+                print(fabricante)
                 pagina = OpenFDAClient.get_companies(self, fabricante)
                 fabricantes = OpenFDAParser.get_search(self, pagina)
                 html = OpenFDAHTML.drug_page(self, fabricantes)
@@ -259,10 +254,10 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):  # La clase te
                 header2 = 'http://localhost:8000' # en nuestro caso, nos redirige a la página principal.
 
             elif "/secret" in self.path:
-                response = 401               # envía un error con el código 401, que significa no autorizado a acceder a la página.
-                header1 = 'WWW-Authenticate' # para poder acceder a la página, es necesario una autentificación.
+                response = 401                      # envía un error con el código 401, que significa no autorizado a acceder a la página.
+                header1 = 'WWW-Authenticate'        # para poder acceder a la página, es necesario una autentificación.
                 header2 = 'Basic realm = "openfda"' # en este caso, la autentificación será "openfda"
-                self.send_error(401)     # se manda una página error al cliente, explicando el motivo (error 401)
+                self.send_error(401)                # se manda una página error al cliente, explicando el motivo (error 401)
 
             else:
                 response = 404       # en el caso de que la ruta no coincida con ninguno de los recursos, se enviará un
@@ -276,13 +271,12 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):  # La clase te
         # la estructura try/except es para manejar también los errores que se puedan dar en los parámetros, como que se
         # mande un ingrediente activo que no exista, o un string como valor de límite.
 
-        self.send_response(response)  # cabecera que envía el estado de la respuesta
+        self.send_response(response)        # cabecera que envía el estado de la respuesta
         self.send_header(header1, header2)  # Después enviamos las cabeceras necesarias para que el cliente entienda el
-        # contenido que le enviamos (que sera HTML)
+                                            # contenido que le enviamos (que sera HTML)
         self.end_headers()
         if response == 200:
-            self.wfile.write(bytes(html,
-                                   "utf8"))  # Como solo tenemos contenido html en caso de que la respuesta sea 200 OK, creamos un if.
+            self.wfile.write(bytes(html, "utf8"))  # Como solo tenemos contenido html en caso de que la respuesta sea 200 OK, creamos un if.
 
         # self. send_error envía una respuesta de error al cliente, donde el número (404,401...) especifica el código de error http.
 
