@@ -3,7 +3,7 @@ import http.server
 import socketserver
 
 #Puerto donde lanzar el servidor
-PORT = 8006
+PORT = 8000
 
 def lista_medicamentos():
     #necesitamos un cliente que acceda a la página web para bajar los medicamentos. Con ello,
@@ -68,7 +68,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
 
         self.send_response(200) #Primero enviamos el estado de la respuesta, que será OK.
 
-        self.send_header('Content-type', 'text/html') # Después enviamos las cabecerasnecesarias para que el cliente entienda el
+        self.send_header('Content-type', 'text/html') # Después enviamos las cabeceras necesarias para que el cliente entienda el
                                                       # contenido que le enviamos (que sera HTML)
         self.end_headers() # Indicamos que las cabeceras ya han terminamos.
 
@@ -109,6 +109,7 @@ except KeyboardInterrupt:
 
 print("Servidor parado")
 httpd.close()
+
 
 #OBSERVACIÓN: Si ponemos limit 10, nunca podríamos obtener una lista con el nombre de 10 medicamentos, ya que el
 # programa coge los 10 primeros medicamentos y el medicamento número 2 no tiene información sobre su nombre.
